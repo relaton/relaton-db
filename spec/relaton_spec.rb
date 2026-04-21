@@ -255,7 +255,7 @@ RSpec.describe Relaton::Db do
   it "get OMG reference" do
     VCR.use_cassette "omg_ami4ccm_1_0" do
       bib = @db.fetch "OMG AMI4CCM 1.0", nil, {}
-      expect(bib).to be_instance_of Relaton::Bib::ItemData
+      expect(bib).to be_instance_of Relaton::Omg::ItemData
     end
   end
 
@@ -424,7 +424,7 @@ RSpec.describe Relaton::Db do
     expect(Relaton::Xsf::Bibliography).to receive(:get).with("XEP 0001", nil,
                                                              {}).and_return item
     bib = @db.fetch "XEP 0001"
-    expect(bib).to be_instance_of Relaton::Bib::ItemData
+    expect(bib).to be_instance_of Relaton::Xsf::ItemData
     expect(bib.docidentifier.first.content).to eq "XEP 0001"
   end
 

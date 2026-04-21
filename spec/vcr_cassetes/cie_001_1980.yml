@@ -41,21 +41,21 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Github-Request-Id:
-      - B0FA:1E001C:435DFB:517831:69D7034B
+      - C0A8:1C5C:8FA3BC:AEFCD4:69E7952B
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 09 Apr 2026 02:14:48 GMT
+      - Tue, 21 Apr 2026 15:18:03 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-iad-kcgs7200150-IAD
+      - cache-iad-kcgs7200049-IAD
       X-Cache:
-      - HIT
+      - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1775700889.766816,VS0,VE1
+      - S1776784684.823370,VS0,VE117
       Vary:
       - Authorization,Accept-Encoding
       Access-Control-Allow-Origin:
@@ -63,11 +63,11 @@ http_interactions:
       Cross-Origin-Resource-Policy:
       - cross-origin
       X-Fastly-Request-Id:
-      - 18efb925763cb6500f247457ac44bd54670a42d3
+      - 2a1594aaeafd01ea9dbcb54c1d13bb64c07ce921
       Expires:
-      - Thu, 09 Apr 2026 02:19:48 GMT
+      - Tue, 21 Apr 2026 15:23:03 GMT
       Source-Age:
-      - '67'
+      - '0'
     body:
       encoding: ASCII-8BIT
       base64_string: |
@@ -295,7 +295,7 @@ http_interactions:
         /x9QSwECHgMUAAAACABImIZcWEGQJZQmAAAuAgEADQAYAAAAAAABAAAApIEA
         AAAAaW5kZXgtdjEueWFtbFVUBQADdzvUaXV4CwABBPUBAAAEFAAAAFBLBQYA
         AAAAAQABAFMAAADbJgAAAAA=
-  recorded_at: Thu, 09 Apr 2026 02:14:48 GMT
+  recorded_at: Tue, 21 Apr 2026 15:18:03 GMT
 - request:
     method: get
     uri: https://raw.githubusercontent.com/relaton/relaton-data-cie/refs/heads/data-v2/data/cie-001-1980.yaml
@@ -343,23 +343,23 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Github-Request-Id:
-      - 3DAC:E3D68:47846D:55A0A4:69D7034A
+      - F48E:1B32:8561B2:A0798F:69E7952B
       Content-Encoding:
       - gzip
       Accept-Ranges:
       - bytes
       Date:
-      - Thu, 09 Apr 2026 02:14:49 GMT
+      - Tue, 21 Apr 2026 15:18:04 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-iad-kjyo7100099-IAD
+      - cache-iad-kcgs7200168-IAD
       X-Cache:
-      - HIT
+      - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1775700889.026490,VS0,VE1
+      - S1776784684.079872,VS0,VE78
       Vary:
       - Authorization,Accept-Encoding
       Access-Control-Allow-Origin:
@@ -367,11 +367,11 @@ http_interactions:
       Cross-Origin-Resource-Policy:
       - cross-origin
       X-Fastly-Request-Id:
-      - c96e179e98fa9c5ee5ae45b545ff763baef5be35
+      - de8b1485742885bab6dc0fbe536343a2df9bb6ff
       Expires:
-      - Thu, 09 Apr 2026 02:19:49 GMT
+      - Tue, 21 Apr 2026 15:23:04 GMT
       Source-Age:
-      - '67'
+      - '0'
     body:
       encoding: ASCII-8BIT
       base64_string: |
@@ -397,5 +397,5 @@ http_interactions:
         /2ZrfB8v0PUvNGB+JyKvaSPt6Gde6NfcLQ1kHo69QhOcdbFfH0Q/0Z8lPaqd
         T3Uj3oeSPpb03EvsJvXPLO9L+lTSh7wFszHeHsq0qh4cTi7zR+Zof/o9ozlp
         JAv+Ftd55fzwga7K9A3ABs/LtjhbbTgdk8ZxujFqi/WcVmvxD43iopUJCAAA
-  recorded_at: Thu, 09 Apr 2026 02:14:49 GMT
+  recorded_at: Tue, 21 Apr 2026 15:18:04 GMT
 recorded_with: VCR 6.4.0
