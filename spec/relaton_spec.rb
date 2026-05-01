@@ -70,6 +70,7 @@ RSpec.describe Relaton::Db do
 
   context "IEC" do
     before do
+      require "relaton_iec"
       docid = RelatonBib::DocumentIdentifier.new(id: "IEC 60050-102:2007", type: "IEC")
       item = RelatonIec::IecBibliographicItem.new docid: [docid]
       expect(RelatonIec::IecBibliography).to receive(:get).with("IEC 60050-102:2007", nil, {}).and_return item
@@ -246,6 +247,7 @@ RSpec.describe Relaton::Db do
   # end
 
   it "get W3C reference" do
+    require "relaton_w3c"
     docid = RelatonBib::DocumentIdentifier.new(id: "W3C REC-json-ld11-20200716", type: "W3C")
     item = RelatonW3c::W3cBibliographicItem.new docid: [docid]
     expect(RelatonW3c::W3cBibliography).to receive(:get).with("W3C REC-json-ld11-20200716", nil, {}).and_return item
@@ -255,6 +257,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get CCSDS reference" do
+    require "relaton_ccsds"
     docid = RelatonBib::DocumentIdentifier.new id: "CCSDS 230.2-G-1", type: "CCSDS"
     item = RelatonCcsds::BibliographicItem.new docid: [docid]
     expect(RelatonCcsds::Bibliography).to receive(:get).with("CCSDS 230.2-G-1", nil, {}).and_return item
@@ -269,6 +272,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get IHO reference" do
+    require "relaton_iho"
     docid = RelatonBib::DocumentIdentifier.new(id: "IHO B-11", type: "IHO")
     item = RelatonIho::IhoBibliographicItem.new docid: [docid]
     expect(RelatonIho::IhoBibliography).to receive(:get).with("IHO B-11", nil, {}).and_return item
@@ -292,6 +296,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get BSI reference" do
+    require "relaton_bsi"
     docid = RelatonBib::DocumentIdentifier.new(id: "BSI BS EN ISO 8848", type: "BSI")
     item = RelatonBsi::BsiBibliographicItem.new docid: [docid]
     expect(RelatonBsi::BsiBibliography).to receive(:get).with("BSI BS EN ISO 8848", nil, {}).and_return item
@@ -307,6 +312,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get IANA reference" do
+    require "relaton_iana"
     docid = RelatonBib::DocumentIdentifier.new(id: "IANA service-names-port-numbers", type: "IANA")
     item = RelatonIana::IanaBibliographicItem.new docid: [docid]
     expect(RelatonIana::IanaBibliography).to receive(:get).with("IANA service-names-port-numbers", nil, {}).and_return item
@@ -322,6 +328,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get OASIS reference" do
+    require "relaton_oasis"
     docid = RelatonBib::DocumentIdentifier.new(id: "OASIS amqp-core-types-v1.0-Pt1", type: "OASIS")
     item = RelatonOasis::OasisBibliographicItem.new docid: [docid]
     expect(RelatonOasis::OasisBibliography).to receive(:get).with("OASIS amqp-core-types-v1.0-Pt1", nil, {}).and_return item
@@ -330,6 +337,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get BIPM reference" do
+    require "relaton_bipm"
     docid = RelatonBib::DocumentIdentifier.new(id: "BIPM Metrologia 29 6 373", type: "BIPM")
     item = RelatonBipm::BipmBibliographicItem.new docid: [docid]
     expect(RelatonBipm::BipmBibliography).to receive(:get).with("BIPM Metrologia 29 6 373", nil, {}).and_return item
@@ -344,6 +352,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get JIS reference" do
+    require "relaton_jis"
     docid = RelatonBib::DocumentIdentifier.new(id: "JIS X 0001", type: "JIS")
     item = RelatonJis::BibliographicItem.new docid: [docid]
     expect(RelatonJis::Bibliography).to receive(:get).with("JIS X 0001", nil, {}).and_return item
@@ -353,6 +362,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get XSF reference" do
+    require "relaton_xsf"
     docid = RelatonBib::DocumentIdentifier.new(id: "XEP 0001", type: "XSF")
     item = RelatonXsf::BibliographicItem.new docid: [docid]
     expect(RelatonXsf::Bibliography).to receive(:get).with("XEP 0001", nil, {}).and_return item
@@ -362,6 +372,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get ETSI reference" do
+    require "relaton_etsi"
     docid = RelatonBib::DocumentIdentifier.new(id: "ETSI EN 300 175-8", type: "ETSI")
     item = RelatonEtsi::BibliographicItem.new docid: [docid]
     expect(RelatonEtsi::Bibliography).to receive(:get).with("ETSI EN 300 175-8", nil, {}).and_return item
@@ -371,6 +382,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get ISBN reference" do
+    require "relaton_isbn"
     docid = RelatonBib::DocumentIdentifier.new(id: "ISBN 978-0-580-50101-4", type: "ISBN")
     item = RelatonBib::BibliographicItem.new docid: [docid]
     expect(RelatonIsbn::OpenLibrary).to receive(:get).with("ISBN 978-0-580-50101-4", nil, {}).and_return item
@@ -380,6 +392,7 @@ RSpec.describe Relaton::Db do
   end
 
   it "get PLATEAU reference" do
+    require "relaton/plateau"
     docid = RelatonBib::DocumentIdentifier.new(id: "PLATEAU Hanbook #01", type: "PLATEAU")
     item = Relaton::Plateau::BibItem.new docid: [docid]
     expect(Relaton::Plateau::Bibliography).to receive(:get).with("PLATEAU Hanbook #01", nil, {}).and_return item
@@ -438,6 +451,7 @@ RSpec.describe Relaton::Db do
 
     context "ITU" do
       it "included" do
+        require "relaton_itu"
         docid = RelatonBib::DocumentIdentifier.new(id: "ITU-T G.989.2", type: "ITU")
         group = RelatonItu::ItuGroup.new(name: "Group")
         ed = RelatonItu::EditorialGroup.new(bureau: "Bureau", group: group)
