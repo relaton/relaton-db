@@ -18,7 +18,7 @@ RSpec.describe Relaton::DbCache do
     dir = "testcache/iso"
     FileUtils.mkdir_p dir
     file_name = File.join dir, "iso_123.xml"
-    file = File.open file_name, File::RDWR | File::CREAT, encoding: "UTF-8"
+    file = File.open(file_name, File::RDWR | File::CREAT, encoding: "UTF-8") # rubocop:disable Style/FileOpen
     file.flock File::LOCK_EX
     command = <<~RBY
       require "relaton"

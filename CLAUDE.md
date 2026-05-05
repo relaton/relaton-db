@@ -27,7 +27,7 @@ Relaton is a Ruby gem that fetches, caches, and manages bibliographic references
 
 ### Plugin Registry Pattern
 
-**Relaton::Registry** (singleton) auto-discovers and manages backend processor gems (relaton-iso, relaton-iec, relaton-ietf, etc.). Each processor implements the **Relaton::Processor** interface (`get`, `from_xml`, `hash_to_bib`, `prefix`, `defaultprefix`). The registry routes reference codes to the correct processor by matching prefixes (e.g., "ISO 19115" → `:relaton_iso`).
+**Relaton::Registry** (singleton) auto-discovers and manages backend processor gems (relaton-iso, relaton-iec, relaton-ietf, etc.). Each processor implements the **Relaton::Processor** interface (`get`, `from_xml`, `from_yaml`, `grammar_hash`, `prefix`, `defaultprefix`). The registry routes reference codes to the correct processor by matching prefixes (e.g., "ISO 19115" → `:relaton_iso`).
 
 ### Db (lib/relaton/db.rb) — Main Public API
 
@@ -35,6 +35,8 @@ Relaton is a Ruby gem that fetches, caches, and manages bibliographic references
 1. Identifies the processor via Registry prefix matching
 2. Handles combined references (`+` for derivedFrom, `,` for amendments) in `combine_doc`
 3. Delegates to `check_bibliocache` which manages the dual-cache lookup and network fetch flow
+
+`Relaton::Db#fetch_all(text, edition, year)` searches cached entries, filtering by text content (via `match_xml_text?`), edition, and/or year. Returns an array of deserialized bibliographic items from both local and global caches.
 
 The dual-cache strategy uses a **global cache** (`~/.relaton/cache`) and an optional **local cache** (project-level). `check_bibliocache` checks local first, falls back to global, and syncs between them.
 
@@ -64,5 +66,5 @@ Thread pool for `fetch_async`. Default 10 threads per processor, overridable via
 
 ## Style
 
-- RuboCop config inherits from [Ribose OSS guides](https://github.com/riboseinc/oss-guides), target Ruby 3.1
+- RuboCop config inherits from [Ribose OSS guides](https://github.com/riboseinc/oss-guides), target Ruby 3.2
 - Thread safety via `@semaphore` (Mutex) around cache reads/writes in Db

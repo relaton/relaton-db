@@ -4,7 +4,7 @@ name: rake
 
 on:
   push:
-    branches: [ master, main ]
+    branches: [ master, main, lutaml-integration ]
     tags: [ v* ]
   pull_request:
   workflow_dispatch:

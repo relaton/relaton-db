@@ -8,10 +8,9 @@ module Relaton
       @configuration ||= self::Configuration.new
     end
   end
-  extend Config
 
-  class Configuration # < RelatonBib::Configuration
-
+  # < RelatonBib::Configuration
+  class Configuration
     attr_accessor :use_api, :api_host
 
     def initialize

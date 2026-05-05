@@ -101,7 +101,7 @@ module Relaton
     # Returns all items
     # @return [Array<String>]
     def all(&block)
-      Dir.glob("#{@dir}/**/*.{xml,yml,yaml}").sort.map do |f|
+      Dir.glob("#{@dir}/**/*.{xml,yml,yaml}").map do |f|
         content = File.read(f, encoding: "utf-8")
         block ? yield(f, content) : content
       end
@@ -168,7 +168,8 @@ module Relaton
     def filename(key)
       prefcode = key.downcase.match(/^(?<prefix>[^(]+)\((?<code>[^)]+)/)
       fn = if prefcode
-             "#{prefcode[:prefix]}/#{prefcode[:code].gsub(/[:\s\/()]/, '_').squeeze('_')}"
+             "#{prefcode[:prefix]}/#{prefcode[:code].gsub(/[:\s\/()]/,
+                                                          '_').squeeze('_')}"
            else
              key.gsub(/[-:\s]/, "_")
            end

@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Ribose Inc."]
   spec.email         = ["open.source@ribose.com"]
 
-  spec.summary       = "The Relaton core for importing, managing and caching "\
+  spec.summary       = "The Relaton core for importing, managing and caching " \
                        "bibliographic references to technical standards."
   spec.description   = <<~DESCRIPTION
       The Relaton core for importing, managing and caching bibliographic
@@ -27,35 +27,35 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
   spec.files         = `git ls-files`.split("\n")
   # spec.test_files    = `git ls-files -- {spec}/*`.split("\n")
-  spec.required_ruby_version = Gem::Requirement.new(">= 3.1.0")
+  spec.required_ruby_version = Gem::Requirement.new(">= 3.2.0")
 
-  spec.add_dependency "relaton-3gpp", "~> 1.20.0"
-  spec.add_dependency "relaton-bipm", "~> 1.20.0"
-  spec.add_dependency "relaton-bsi", "~> 1.20.0"
-  spec.add_dependency "relaton-calconnect", "~> 1.20.0"
-  spec.add_dependency "relaton-ccsds", "~> 1.20.2"
-  spec.add_dependency "relaton-cen", "~> 1.20.0"
-  spec.add_dependency "relaton-cie", "~> 1.20.0"
-  spec.add_dependency "relaton-doi", "~> 1.20.0"
-  spec.add_dependency "relaton-ecma", "~> 1.20.0"
-  spec.add_dependency "relaton-etsi", "~> 1.20.0"
-  spec.add_dependency "relaton-gb", "~> 1.20.0"
-  spec.add_dependency "relaton-iana", "~> 1.20.0"
-  spec.add_dependency "relaton-iec", "~> 1.20.3"
-  spec.add_dependency "relaton-ieee", "~> 1.20.0"
-  spec.add_dependency "relaton-ietf", "~> 1.20.0"
-  spec.add_dependency "relaton-iho", "~> 1.20.0"
-  spec.add_dependency "relaton-isbn", "~> 1.20.0"
-  spec.add_dependency "relaton-iso", "~> 1.20.0"
-  spec.add_dependency "relaton-itu", "~> 1.20.0"
-  spec.add_dependency "relaton-jis", "~> 1.20.0"
-  spec.add_dependency "relaton-nist", "~> 1.20.0"
-  spec.add_dependency "relaton-oasis", "~> 1.20.0"
-  spec.add_dependency "relaton-ogc", "~> 1.20.0"
-  spec.add_dependency "relaton-omg", "~> 1.20.0"
-  spec.add_dependency "relaton-plateau", "~> 1.20.0"
-  spec.add_dependency "relaton-un", "~> 1.20.0"
-  spec.add_dependency "relaton-w3c", "~> 1.20.0"
-  spec.add_dependency "relaton-xsf", "~> 1.20.0"
-  spec.add_development_dependency "rubocop-rails"
+  spec.add_dependency "relaton-3gpp", "~> 2.1.0"
+  spec.add_dependency "relaton-bipm", "~> 2.1.0"
+  spec.add_dependency "relaton-bsi", "~> 2.1.0"
+  spec.add_dependency "relaton-calconnect", "~> 2.1.0"
+  spec.add_dependency "relaton-ccsds", "~> 2.1.0"
+  spec.add_dependency "relaton-cen", "~> 2.1.0"
+  spec.add_dependency "relaton-cie", "~> 2.1.0"
+  spec.add_dependency "relaton-doi", "~> 2.1.0"
+  spec.add_dependency "relaton-ecma", "~> 2.1.0"
+  spec.add_dependency "relaton-etsi", "~> 2.1.0"
+  spec.add_dependency "relaton-gb", "~> 2.1.0"
+  spec.add_dependency "relaton-iana", "~> 2.1.0"
+  spec.add_dependency "relaton-iec", "~> 2.1.0"
+  spec.add_dependency "relaton-ieee", "~> 2.1.0"
+  spec.add_dependency "relaton-ietf", "~> 2.1.0"
+  spec.add_dependency "relaton-iho", "~> 2.1.0"
+  spec.add_dependency "relaton-isbn", "~> 2.1.0"
+  spec.add_dependency "relaton-iso", "~> 2.1.0"
+  spec.add_dependency "relaton-itu", "~> 2.1.0"
+  spec.add_dependency "relaton-jis", "~> 2.1.0"
+  spec.add_dependency "relaton-nist", "~> 2.1.0"
+  spec.add_dependency "relaton-oasis", "~> 2.1.0"
+  spec.add_dependency "relaton-ogc", "~> 2.1.0"
+  spec.add_dependency "relaton-omg", "~> 2.1.0"
+  spec.add_dependency "relaton-plateau", "~> 2.1.0"
+  spec.add_dependency "relaton-un", "~> 2.1.0"
+  spec.add_dependency "relaton-w3c", "~> 2.1.0"
+  spec.add_dependency "relaton-xsf", "~> 2.1.0"
+  spec.metadata["rubygems_mfa_required"] = "true"
 end

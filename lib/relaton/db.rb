@@ -28,13 +28,13 @@ module Relaton
       @db&.clear
       @local_db&.clear
       @registry.processors.each_value do |p|
-        require p.short.to_s
         p.remove_index_file if p.respond_to? :remove_index_file
       end
     end
 
     ##
-    # The class of reference requested is determined by the prefix of the reference:
+    # The class of reference requested is determined by the prefix
+    # of the reference:
     # GB Standard for gbbib, IETF for ietfbib, ISO for isobib, IEC or IEV for
     #   iecbib,
     #
@@ -104,8 +104,10 @@ module Relaton
     # @param [String] year document yer
     # @param [Hash] opts options
     #
-    # @return [RelatonBib::BibliographicItem, RelatonBib::RequestError, nil] bibitem if document is found,
-    #   request error if server doesn't answer, nil if document not found
+    # @return [RelatonBib::BibliographicItem,
+    #   RelatonBib::RequestError, nil] bibitem if document is
+    #   found, request error if server doesn't answer,
+    #   nil if document not found
     #
     def fetch_async(ref, year = nil, opts = {}, &block) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
       stdclass = @registry.class_by_ref ref
@@ -115,13 +117,14 @@ module Relaton
           threads = ENV["RELATON_FETCH_PARALLEL"]&.to_i || processor.threads
           wp = WorkersPool.new(threads) do |args|
             args[3].call fetch(*args[0..2])
-          rescue RelatonBib::RequestError => e
+          rescue Relaton::RequestError => e
             args[3].call e
           rescue StandardError => e
             Util.error "`#{args[0]}` -- #{e.message}"
             args[3].call nil
           end
-          @queues[stdclass] = { queue: SizedQueue.new(threads * 2), workers_pool: wp }
+          @queues[stdclass] =
+            { queue: SizedQueue.new(threads * 2), workers_pool: wp }
           Thread.new { process_queue @queues[stdclass] }
         end
         @queues[stdclass][:queue] << [ref, year, opts, block]
@@ -194,7 +197,8 @@ module Relaton
     # @param (see #fetch_api)
     # @return (see #fetch_api)
     def fetch_doc(code, year, opts, processor)
-      if Relaton.configuration.use_api then fetch_api(code, year, opts, processor)
+      if Relaton.configuration.use_api then fetch_api(code, year, opts,
+                                                      processor)
       else processor.get(code, year, opts)
       end
     end
@@ -211,7 +215,8 @@ module Relaton
     # @param processor [Relaton::Processor]
     # @return [RelatonBib::BibliographicItem, nil]
     def fetch_api(code, year, opts, processor)
-      url = "#{Relaton.configuration.api_host}/api/v1/document?#{params(code, year, opts)}"
+      url = "#{Relaton.configuration.api_host}" \
+            "/api/v1/document?#{params(code, year, opts)}"
       rsp = Net::HTTP.get_response URI(url)
       processor.from_xml rsp.body if rsp.code == "200"
     rescue Errno::ECONNREFUSED
@@ -238,7 +243,7 @@ module Relaton
     # @param year [Integer, nil] year to filter
     # @return [BibliographicItem, nil]
     def search_xml(file, xml, text, edition, year)
-      return unless text.nil? || match_xml_text(xml, text)
+      return unless text.nil? || match_xml_text?(xml, text)
 
       search_edition_year(file, xml, edition, year)
     end
@@ -251,10 +256,12 @@ module Relaton
     def search_edition_year(file, content, edition, year) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       processor = @registry.processor_by_ref(file.split("/")[-2])
       item = if file.match?(/xml$/) then processor.from_xml(content)
-             else processor.hash_to_bib(YAML.safe_load(content))
+             else processor.from_yaml(content)
              end
       item if (edition.nil? || item.edition.content == edition) && (year.nil? ||
-        item.date.detect { |d| d.type == "published" && d.on(:year).to_s == year.to_s })
+        item.date.detect do |d|
+          d.type == "published" && d.at.to_date.year.to_s == year.to_s
+        end)
     end
 
     #
@@ -265,8 +272,13 @@ module Relaton
     #
     # @return [Boolean]
     #
-    def match_xml_text(xml, text)
-      %r{((?<attr>=((?<apstr>')|"))|>).*?#{text}.*?(?(<attr>)(?(<apstr>)'|")|<)}mi.match?(xml)
+    def match_xml_text?(xml, text)
+      esc = Regexp.escape(text)
+      pat = "((?<attr>=((?<apstr>')|\"" \
+            "))|>).*?#{esc}" \
+            ".*?(?(<attr>)(?(<apstr>)'|\")|<)"
+      Regexp.new(pat, Regexp::MULTILINE | Regexp::IGNORECASE)
+        .match?(xml)
     end
 
     # @param code [String]
@@ -279,14 +291,8 @@ module Relaton
     #   actual reference with year
     # @option opts [Integer] :retries (1) Number of network retries
     #
-    # @return [nil, RelatonBib::BibliographicItem,
-    #   RelatonIsoBib::IsoBibliographicItem, RelatonItu::ItuBibliographicItem,
-    #   RelatonIetf::IetfBibliographicItem, RelatonIec::IecBibliographicItem,
-    #   RelatonIeee::IeeeBibliographicItem, RelatonNist::NistBibliongraphicItem,
-    #   RelatonGb::GbbibliographicItem, RelatonOgc::OgcBibliographicItem,
-    #   RelatonCalconnect::CcBibliographicItem, RelatinUn::UnBibliographicItem,
-    #   RelatonBipm::BipmBibliographicItem, RelatonIho::IhoBibliographicItem,
-    #   RelatonOmg::OmgBibliographicItem, RelatonW3c::W3cBibliographicItem]
+    # @return [nil, Relaton::Bib::ItemData
+    #
     def combine_doc(code, year, opts, stdclass) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
       return if stdclass == :relaton_bipm
 
@@ -295,21 +301,22 @@ module Relaton
         reldesc = nil
       elsif (refs = code.split ", ").size > 1
         reltype = "complements"
-        reldesc = RelatonBib::FormattedString.new content: "amendment"
+        reldesc = Bib::LocalizedMarkedUpString.new content: "amendment"
       else return
       end
 
-      doc = @registry[stdclass].hash_to_bib docid: { id: code }
+      yaml = { docidentifier: [{ content: code }] }.to_yaml
+      doc = @registry[stdclass].from_yaml(yaml)
       ref = refs[0]
       updates = check_bibliocache(refs[0], year, opts, stdclass)
       if updates
-        doc.relation << RelatonBib::DocumentRelation.new(bibitem: updates, type: "updates")
+        doc.relation << Bib::Relation.new(bibitem: updates, type: "updates")
       end
       divider = stdclass == :relaton_itu ? " " : "/"
       refs[1..].each_with_object(doc) do |c, d|
         bib = check_bibliocache(ref + divider + c, year, opts, stdclass)
         if bib
-          d.relation << RelatonBib::DocumentRelation.new(
+          d.relation << Bib::Relation.new(
             type: reltype, description: reldesc, bibitem: bib,
           )
         end
@@ -334,12 +341,10 @@ module Relaton
       ret = code
       ret += (stdclass == :relaton_gb ? "-" : ":") + year if year
       ret += " (all parts)" if opts[:all_parts]
-      if opts[:publication_date_after]
-        ret += " after-#{opts[:publication_date_after]}"
-      end
-      if opts[:publication_date_before]
-        ret += " before-#{opts[:publication_date_before]}"
-      end
+      after = opts[:publication_date_after]
+      ret += " after-#{after}" if after
+      before = opts[:publication_date_before]
+      ret += " before-#{before}" if before
       ["#{prefix}(#{ret.strip})", code]
     end
 
@@ -349,7 +354,11 @@ module Relaton
     # @return [Array]
     def strip_id_wrapper(code, stdclass)
       prefix = @registry[stdclass].prefix
-      code = code.sub(/\u2013/, "-").sub(/^#{prefix}\((.+)\)$/, "\\1")
+      code =
+        if code.is_a?(String)
+          code.sub("\u2013", "-").sub(/^#{prefix}\((.+)\)$/, "\\1")
+        else code.to_s
+        end
       [prefix, code]
     end
 
@@ -461,7 +470,9 @@ module Relaton
     #
     def new_bib_entry(code, year, opts, stdclass, **args)
       entry = @semaphore.synchronize { args[:db] && args[:db][args[:id]] }
-      return fetch_entry(code, year, opts, stdclass, **args) if !entry || opts[:no_cache]
+      if !entry || opts[:no_cache]
+        return fetch_entry(code, year, opts, stdclass, **args)
+      end
 
       if entry&.match?(/^not_found/)
         Util.info "not found in cache, if you wish to " \
@@ -484,7 +495,8 @@ module Relaton
 
     #
     # If the reference isn't equal to the document identifier
-    # then store the document in the cache and create for the reference a redirection to the document
+    # then store the document in the cache and create
+    # for the reference a redirection to the document
     #
     # @param [<Type>] bib <description>
     # @param [<Type>] stdclass <description>
@@ -493,11 +505,13 @@ module Relaton
     # @return [<Type>] <description>
     #
     def check_entry(bib, stdclass, **args) # rubocop:disable Metrics/AbcSize,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
-      bib_id = bib&.docidentifier&.first&.id
+      bib_id = bib && bib.docidentifier.first&.content
 
       # when ref isn't equal to bib's id then return a redirection to bib's id
-      if args[:db] && args[:id] && bib_id && args[:id] !~ %r{#{Regexp.quote("(#{bib_id})")}}
-        bid = std_id(bib.docidentifier.first.id, nil, {}, stdclass).first
+      quoted = Regexp.quote("(#{bib_id})")
+      if args[:db] && args[:id] && bib_id &&
+          args[:id] !~ /#{quoted}/
+        bid = std_id(bib.docidentifier.first.content, nil, {}, stdclass).first
         @semaphore.synchronize { args[:db][bid] ||= bib_entry bib }
         "redirection #{bid}"
       else bib_entry bib
@@ -521,7 +535,7 @@ module Relaton
     #
     def net_retry(code, year, opts, processor, retries)
       fetch_doc code, year, opts, processor
-    rescue RelatonBib::RequestError => e
+    rescue Relaton::RequestError => e
       raise e unless retries > 1
 
       net_retry(code, year, opts, processor, retries - 1)
@@ -537,7 +551,11 @@ module Relaton
     #   RelatonOmg::OmgBibliographicItem, RelatonW3c::W3cBibliographicItem]
     # @return [String] XML or "not_found mm-dd-yyyy"
     def bib_entry(bib)
-      bib.respond_to?(:to_xml) ? bib.to_xml(bibdata: true) : "not_found #{Date.today}"
+      if bib.respond_to?(:to_xml)
+        bib.to_xml(bibdata: true)
+      else
+        "not_found #{Date.today}"
+      end
     end
 
     # Check if an XML entry's published date falls within the requested range.

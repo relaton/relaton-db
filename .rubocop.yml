@@ -7,6 +7,6 @@ plugins: rubocop-rails
 inherit_from:
   - https://raw.githubusercontent.com/riboseinc/oss-guides/master/ci/rubocop.yml
 AllCops:
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.2
 Rails:
   Enabled: false

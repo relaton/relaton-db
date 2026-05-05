@@ -29,6 +29,7 @@ Relaton imports bibliographic entries from:
 * CIE through the techstreet.com website, via the https://github.com/relaton/relaton-cie[relaton-cie] gem
 * DOI through the api.crossref.org website, via the https://github.com/relaton/relaton-doi[relaton-doi] gem
 * ECMA through the ecma-international.org website, via the https://github.com/relaton/relaton-ecma[relaton-ecma] gem
+* ETSI through the etsi.org website, via the https://github.com/relaton/relaton-etsi[relaton-etsi] gem
 * GB (Chinese national standards) through the GB websites, via the https://github.com/relaton/relaton-gb[relaton-gb] gem
 * IANA through the https://github.com/ietf-tools/iana-registries[iana-registries] dataset, via the https://github.com/relaton/relaton-iana[relaton-iana] gem
 * IEC through the iec.ch website, via the https://github.com/relaton/relaton-iec[relaton-iec] gem
@@ -37,11 +38,13 @@ Relaton imports bibliographic entries from:
 * IHO through the iho.int website, via the https://github.com/relaton/relaton-iho[relaton-iho] gem
 * ISO through the iso.org website, via the https://github.com/relaton/relaton-iso[relaton-iso] gem
 * ITU through the itu.int website, via the https://github.com/relaton/relaton-itu[relaton-itu] gem
-* JIS through the webdesk.jsa.or.jp website, via the https://gihub.com/relaton/relaton-jis[relaton-jis] gem
-* NIST standards through the nist.gov website, via the https://github.com/relaton/relaton-nist[relaotn-nist] gem
+* ISBN through the openlibrary.org website, via the https://github.com/relaton/relaton-isbn[relaton-isbn] gem
+* JIS through the webdesk.jsa.or.jp website, via the https://github.com/relaton/relaton-jis[relaton-jis] gem
+* NIST standards through the nist.gov website, via the https://github.com/relaton/relaton-nist[relaton-nist] gem
 * OASIS through the www.oasis-open.org/standards website, via the https://github.com/relaton/relaton-oasis[relaton-oasis] gem
-* OGC through the https://github.com/opengeospatial/NamingAuthority[dataset], via the https://gibhub.com/relaton/relaton-ogc[relaton-ogc] gem
+* OGC through the https://github.com/opengeospatial/NamingAuthority[dataset], via the https://github.com/relaton/relaton-ogc[relaton-ogc] gem
 * OMG through the omg.org/spec website, via the https://github.com/relaton/relaton-omg[relaton-omg] gem
+* Plateau through the www.mlit.go.jp website, via the https://github.com/relaton/relaton-plateau[relaton-plateau] gem
 * UN through the documents.un.org website, via the https://github.com/relaton/relaton-un[relaton-un] gem
 * W3C through the w3c.org website, via the https://github.com/relaton/relaton-w3c[relaton-w3c] gem
 * XSF through the xmpp.org website, via the https://github.com/relaton/relaton-xsf[relaton-xsf] gem
@@ -82,7 +85,6 @@ e.g. `get("ISO 19115-1", "2014", all_parts: true)` is transformed into a referen
 
 === Configuration
 
-* `logger` - `Logger` instance. By default, the logger is `Logger.new($stderr)` with `Logger::WARN` level.
 * `use_api` - `true` if it needs to use an online cache, `false` if not. The default value is `true`.
 * `api_host` - URL of an online cache. The default value is https://api.relaton.org.
 
@@ -92,10 +94,18 @@ require "relaton"
 => true
 
 Relaton.configure do |conf|
-  conf.logger.level = Logger::DEBUG
   conf.use_api = true
   conf.api_host = "https://api.relaton.org"
 end
+----
+
+Logger configuration is managed through the `relaton-logger` gem via `Relaton.logger_pool`:
+
+[source,ruby]
+----
+require "relaton"
+
+Relaton.logger_pool[:default] = Relaton::Logger::Log.new($stderr, levels: [:debug, :info, :warn, :error, :fatal])
 ----
 
 === Create DB
@@ -109,29 +119,17 @@ end
 ----
 # Do not cache any entries retrieved
 db = Relaton::Db.new(nil, nil)
-=> #<Relaton::Db:0x007faaaba77648
- @db=nil,
- @db_name=nil,
- @local_db=nil,
- @local_db_name=nil,
+=> #<Relaton::Db:0x0000000127622a50
 ...
 
 # Use only the global cache for any entries retrieved
 db = Relaton::Db.new("globalcache", nil)
-=> #<Relaton::Db:0x007faabc0e7b30
- @db=#<Relaton::DbCache:0x007faabc0e7ab8 @dir="globalcache", @ext="xml">,
- @db_name="globalcache",
- @local_db=nil,
- @local_db_name=nil,
+=> #<Relaton::Db:0x00000001277cd120
 ...
 
 # Use both a local and a global cache
 db = Relaton::Db.new("globalcache", "localcache")
-=> #<Relaton::Db:0x007faabc900628
- @db=#<Relaton::DbCache:0x007faabc900060 @dir="globalcache", @ext="xml">,
- @db_name="globalcache",
- @local_db=#<Relaton::DbCache:0x007faabc8fa5c0 @dir="localcache", @ext="xml">,
- @local_db_name="localcache",
+=> #<Relaton::Db:0x0000000127aaf6e0
 ...
 ----
 
@@ -157,7 +155,7 @@ db.mv("new_local_dir", type: :local)
 
 `Relaton::Db#clear` removes all entries form DB
 
-=== Fetch documens
+=== Fetch documents
 
 ==== Fetch document by references
 
@@ -169,11 +167,11 @@ There are 3 fetching methods:
 
 Arguments:
 
-* `reference` - (String) reference to fethc document
-* `year` - (String or nil) year to filter relult (optional)
-* `options` - (Hash) hash of options. Alloved options:
+* `reference` - (String) reference to fetch document
+* `year` - (String or nil) year to filter result (optional)
+* `options` - (Hash) hash of options. Allowed options:
 - `:all_parts` - (Boolean) should be `true` if all-parts reference is required
-- `:keep_yer` - (Boolean) should be `true` if undated reference should return an actual reference with the year
+- `:keep_year` - (Boolean) should be `true` if undated reference should return an actual reference with the year
 - `:retries` - (Number) number of network retries. Default 1
 - `:no_cache` - (Boolean) should be `true` if cache should be ignored
 - `:publication_date_after` - (String) filter for documents published on or after this date (inclusive, `"YYYY-MM-DD"`)
@@ -187,34 +185,34 @@ x = db.fetch("IEEE 19011")
 => nil
 
 x = db.fetch("ISO 19011")
-[relaton-iso] (ISO 19011) fetching...
-[relaton-iso] (ISO 19011) found `ISO 19011 (all parts)`
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007fb1d0ab2f00
+[relaton-iso] INFO: (ISO 19011) Fetching from Relaton repository ...
+[relaton-iso] INFO: (ISO 19011) Found: `ISO 19011:2018`
+=> #<Relaton::Iso::ItemData:0x0000000128631e00
 ...
 
 x = db.fetch("ISO 19011", "2011", retries: 3)
-[relaton-iso] (ISO 19011) fetching...
-[relaton-iso] (ISO 19011) found `ISO 19011:2011`
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007fb1d2593068
+[relaton-iso] INFO: (ISO 19011:2011) Fetching from Relaton repository ...
+[relaton-iso] INFO: (ISO 19011:2011) Found: `ISO 19011:2011`
+=> #<Relaton::Iso::ItemData:0x000000013af95020
 ...
 
 x = db.fetch("ISO 19115", nil, all_parts: true)
-[relaton-iso] (ISO 19115) fetching...
-[relaton-iso] (ISO 19115) found `ISO 19115 (all parts)`
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007fb1d0ae8bf0
+[relaton-iso] INFO: (ISO 19115 (all parts)) Fetching from Relaton repository ...
+[relaton-iso] INFO: (ISO 19115 (all parts)) Found: `ISO 19115 (all parts)`
+=> #<Relaton::Iso::ItemData:0x00000001276f7f98
 ...
 
-# Fetchig from local cache
+# Fetching from local cache
 
 x = db.fetch("ISO 19011")
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007fde5f48a9f0
+=> #<Relaton::Db:0x00000001390b0b00
 ...
 
 x = db.fetch_db("ISO 5749")
 => nil
 
 # Fetching asynchronously
-# RELATON_FETCH_PARALLEL environment variable can be used to ovveride default number of parallel fetches
+# RELATON_FETCH_PARALLEL environment variable can be used to override default number of parallel fetches
 
 # prepare queue for results
 results = Queue.new
@@ -246,13 +244,26 @@ When a date filter is used, the cache is checked first for an existing entry who
 [source,ruby]
 ----
 # Fetch documents published on or after 2018-01-01
-x = db.fetch("ISO 19115-1", nil, publication_date_after: "2018-01-01")
+x = db.fetch("IEC 80000-6", nil, publication_date_after: Date.parse("2018-01-01"))
+[relaton-iec] INFO: (IEC 80000-6) Fetching from Relaton repository ...
+[relaton-iec] INFO: (IEC 80000-6) Found: `IEC 80000-6:2022`
+=> #<Relaton::Iec::ItemData:0x000000013f311920
+...
 
 # Fetch documents published before 2020-01-01
-x = db.fetch("ISO 19115-1", nil, publication_date_before: "2020-01-01")
+x = db.fetch("IEC 80000-6", nil, publication_date_before: Date.parse("2020-01-01"))
+[relaton-iec] INFO: (IEC 80000-6) Fetching from Relaton repository ...
+[relaton-iec] INFO: (IEC 80000-6) Found: `IEC 80000-6:2008`
+=> #<Relaton::Iec::ItemData:0x00000001282b5290
+...
 
 # Fetch documents published within a range
-x = db.fetch("ISO 19115-1", nil, publication_date_after: "2018-01-01", publication_date_before: "2020-01-01")
+x = db.fetch("IEC 80000-6", nil, publication_date_after: Date.parse("2018-01-01"), publication_date_before: Date.parse("2020-01-01"))
+[relaton-iec] INFO: (IEC 80000-6) Fetching from Relaton repository ...
+[relaton-iec] INFO: (IEC 80000-6) Not found.
+[relaton-iec] INFO: (IEC 80000-6) TIP: No match for type, but matches exist: `IEC 80000-6:2008`, `IEC 80000-6:2022`.
+[relaton-iec] INFO: (IEC 80000-6) TIP: No match for type, but matches exist: `IEC 80000-6:2008`, `IEC 80000-6:2022`.
+=> nil
 ----
 
 ==== Fetch by URN
@@ -262,9 +273,9 @@ This functionality works only for IEC documents.
 [source,ruby]
 ----
 x = db.fetch "urn:iec:std:iec:60050-102:2007:::"
-[relaton-iec] (IEC 60050-102) fetching...
-[relaton-iec] (IEC 60050-102) found `IEC 60050-102:2007`
-=> #<RelatonIec::IecBibliographicItem:0x007fbd6c3790e8
+[relaton-iec] INFO: (IEC 60050-102:2007) Fetching from Relaton repository ...
+[relaton-iec] INFO: (IEC 60050-102:2007) Found: `IEC 60050-102:2007`
+=> #<Relaton::Iec::ItemData:0x0000000130e37a98
 ...
 ----
 
@@ -276,56 +287,52 @@ This functionality works only for ISO, IEC, ITU, and NIST documents.
 [source,ruby]
 ----
 bib = db.fetch "ISO 19115-1 + Amd 1"
-[relaton-iso] (ISO 19115-1) fetching...
-[relaton-iso] (ISO 19115-1) found `ISO 19115-1:2014`
-[relaton-iso] (ISO 19115-1/Amd 1) fetching...
-[relaton-iso] (ISO 19115-1/Amd 1) found ISO `19115-1:2014/Amd 1:2018`
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007f95a929a748
+[relaton-iso] INFO: (ISO 19115-1) Fetching from Relaton repository ...
+[relaton-iso] INFO: (ISO 19115-1) Found: `ISO 19115-1:2014`
+[relaton-iso] INFO: (ISO 19115-1/Amd 1) Fetching from Relaton repository ...
+[relaton-iso] INFO: (ISO 19115-1/Amd 1) Found: `ISO 19115-1:2014/Amd 1:2018`
+=> #<Relaton::Iso::ItemData:0x000000012782e4c0
+...
 
-bib.docidentifier[0].id
+bib.docidentifier[0].content.to_s
 => "ISO 19115-1 + Amd 1"
 
 bib.relation[0].type
 => "updates"
 
-bib.relation[0].bibitem.docidentifier[0].id
+bib.relation[0].bibitem.docidentifier[0].content.to_s
 => "ISO 19115-1"
 
 bib.relation[1].type
 => "derivedFrom"
 
-bib.relation[1].bibitem.docidentifier[0].id
-=> "ISO 19115-1/Amd 1:2018"
-
-bib.docidentifier[0].id
-=> "ISO 19115-1, Amd 1"
-
-bib.relation[0].type
-=> "updates"
-
-bib.relation[0].bibitem.docidentifier[0].id
-=> "ISO 19115-1"
-
-bib.relation[1].type
-=> "complements"
-
-bib.relation[1].description
-=> "amendment"
-
-bib.relation[1].bibitem.docidentifier[0].id
-=> "ISO 19115-1/Amd 1:2018"
+bib.relation[1].bibitem.docidentifier[0].content.to_s
+=> "ISO 19115-1/Amd 1"
 ----
 
 ==== Fetch applied documents
 [source,ruby]
 ----
 bib = db.fetch "ISO 19115-1, Amd 1"
-=> ["Chinese Standard", "GB/T 1.1"]
-[relaton-iso] (ISO 19115-1) fetching...
-[relaton-iso] (ISO 19115-1) found ISO `19115-1:2014`
-[relaton-iso] (ISO 19115-1/Amd 1) fetching...
-[relaton-iso] (ISO 19115-1/Amd 1) found ISO `19115-1:2014/Amd 1:2018`
-=> #<RelatonIsoBib::IsoBibliographicItem:0x007fb09b36d1b8
+=> #<Relaton::Iso::ItemData:0x00000001265d5f08
+
+bib.docidentifier[0].content.to_s
+=> "ISO 19115-1, Amd 1"
+
+bib.relation[0].type
+=> "updates"
+
+bib.relation[0].bibitem.docidentifier[0].content.to_s
+=> "ISO 19115-1"
+
+bib.relation[1].type
+=> "complements"
+
+bib.relation[1].description.content
+=> "amendment"
+
+bib.relation[1].bibitem.docidentifier[0].content.to_s
+=> "ISO 19115-1/Amd 1"
 ...
 ----
 
@@ -339,28 +346,28 @@ bib = db.fetch "ISO 19115-1, Amd 1"
 
 [source,ruby]
 ----
-# query for all entries in a cahche
+# query for all entries in a cache
 
 items = db.fetch_all
-=> [#<RelatonIec::IecBibliographicItem:0x007facda8fdc28
+=> [#<Relaton::Iso::ItemData:0x00000001265d5c88
 ...
 
 items.size
 => 6
 
-# query for all entries in a cahche for a certain string
+# query for all entries in a cache for a certain string
 
 items = db.fetch_all("mathematical terminology")
-=> [#<RelatonIec::IecBibliographicItem:0x007ffeae5bd240
+=> [<Relaton::Iec::ItemData:0x0000000125dabd50
 ...
 
 items.size
 => 1
 
-items[0].docidentifier[0].id
+items[0].docidentifier[0].content.to_s
 => "IEC 60050-102:2007"
 
-# query for all entries in a cahche for a certain string and edition
+# query for all entries in a cache for a certain string and edition
 
 items = db.fetch_all("system", edition: "2")
 => [#<RelatonIsoBib::IsoBibliographicItem:0x007ffebe2d1be8
@@ -372,17 +379,17 @@ items.size
 items[0].docidentifier[0].id
 => "ISO 19011:2011"
 
-# query for all entries in a cahche for a certain string and year
+# query for all entries in a cache for a certain string and year
 
-items = db.fetch_all("system", year: 2018)
-=> [#<RelatonIsoBib::IsoBibliographicItem:0x007ffeae645fa0
+items = db.fetch_all("Electromagnetism", edition: "2")
+=> [#<Relaton::Iec::ItemData:0x0000000123a93e80
 ...
 
 items.size
 => 1
 
-items[0].docidentifier[0].id
-=> "ISO 19011 (all parts)"
+items[0].docidentifier[0].content.to_s
+=> "IEC 80000-6:2022"
 ----
 
 === Get document type
@@ -396,29 +403,29 @@ db.docid_type("CN(GB/T 1.1)")
 [source,ruby]
 ----
 x.to_xml
-=> "<bibitem id="ISO19115(allparts)" type="standard">
+=> "<bibitem id="IEC600501022007" type="standard" schema-version="v1.4.1">
       ...
     </bibitem>"
 
 db.to_xml
 => "<?xml version"1.0" encoding="UTF-8"?>
     <documents>
-      <bibdata type="standard">
+      <bibdata type="standard" schema-version="v1.4.1">
         ...
       </bibdata>
-      <bibdata type="standard">
+      <bibdata type="standard" schema-version="v1.4.1">
         ...
       </bibdata>
       ...
     </documents"
 
 x.to_xml bibdata: true
-=> "<bibdata type="standard">
+=> "<bibdata type="standard" schema-version="v1.4.1">
       ...
     </bibdata>"
 
 db.load_entry("ISO(ISO 19011)")
-=> "<bibdata type="standard">
+=> "<bibdata type="standard" schema-version="v1.4.1">
       ...
     </bibdata>"
 ----
@@ -427,7 +434,7 @@ db.load_entry("ISO(ISO 19011)")
 [source,ruby]
 ----
 db.save_entry("ISO(ISO 19011)", nil)
-=> nil
+=> true
 
 db.load_entry("ISO(ISO 19011)")
 => nil

@@ -1,6 +1,7 @@
 module Relaton
   module Util
-    extend RelatonBib::Util
+    extend Relaton::Bib::Util
+
     PROGNAME = "relaton".freeze
   end
 end
