@@ -13,6 +13,8 @@ http_interactions:
       - "*/*"
       User-Agent:
       - Ruby
+      Host:
+      - raw.githubusercontent.com
   response:
     status:
       code: 200
@@ -39,21 +41,21 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Github-Request-Id:
-      - EC6F:186839:11AFA8:14F78F:698F6F3C
+      - A5CE:F4C7E:36D9AF:3EDF46:6A03A21F
       Accept-Ranges:
       - bytes
       Date:
-      - Fri, 13 Feb 2026 18:36:51 GMT
+      - Tue, 12 May 2026 21:56:50 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-pdk-kpdk2140047-PDK
+      - cache-iad-kjyo7100130-IAD
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1771007812.708705,VS0,VE83
+      - S1778623011.548960,VS0,VE99
       Vary:
       - Authorization,Accept-Encoding
       Access-Control-Allow-Origin:
@@ -61,9 +63,9 @@ http_interactions:
       Cross-Origin-Resource-Policy:
       - cross-origin
       X-Fastly-Request-Id:
-      - f22ecd6b686ce5a51a82d94b7371df55384001ca
+      - 87935616b7e69e55d3ec5708d5063b0fc0f551ac
       Expires:
-      - Fri, 13 Feb 2026 18:41:51 GMT
+      - Tue, 12 May 2026 22:01:50 GMT
       Source-Age:
       - '0'
     body:
@@ -285,7 +287,7 @@ http_interactions:
         i1osWcjqHCUAAEDdAAANABgAAAAAAAEAAACkgQAAAABpbmRleC12MS55YW1s
         VVQFAAN+YflndXgLAAEE9QEAAAQUAAAAUEsFBgAAAAABAAEAUwAAAGMlAAAA
         AA==
-  recorded_at: Fri, 13 Feb 2026 18:36:51 GMT
+  recorded_at: Tue, 12 May 2026 21:56:50 GMT
 - request:
     method: get
     uri: https://raw.githubusercontent.com/relaton/relaton-data-cie/main/data/CIE_001_1980.yaml
@@ -294,11 +296,19 @@ http_interactions:
       base64_string: ''
     headers:
       Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      - gzip,deflate,identity
       Accept:
       - "*/*"
       User-Agent:
-      - Ruby
+      - Mechanize/2.14.0 Ruby/3.4.7p58 (http://github.com/sparklemotion/mechanize/)
+      Accept-Language:
+      - en-us,en;q=0.5
+      Host:
+      - raw.githubusercontent.com
+      Connection:
+      - keep-alive
+      Keep-Alive:
+      - '300'
   response:
     status:
       code: 200
@@ -307,7 +317,7 @@ http_interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '1069'
+      - '539'
       Cache-Control:
       - max-age=300
       Content-Security-Policy:
@@ -325,21 +335,23 @@ http_interactions:
       X-Xss-Protection:
       - 1; mode=block
       X-Github-Request-Id:
-      - 6C6B:1488CF:F5166:123CDA:698F6F43
+      - E724:16083F:36B0EB:3EB4C6:6A03A222
+      Content-Encoding:
+      - gzip
       Accept-Ranges:
       - bytes
       Date:
-      - Fri, 13 Feb 2026 18:36:51 GMT
+      - Tue, 12 May 2026 21:56:50 GMT
       Via:
       - 1.1 varnish
       X-Served-By:
-      - cache-pdk-kpdk2140080-PDK
+      - cache-iad-kcgs7200122-IAD
       X-Cache:
       - MISS
       X-Cache-Hits:
       - '0'
       X-Timer:
-      - S1771007812.902570,VS0,VE59
+      - S1778623011.785702,VS0,VE69
       Vary:
       - Authorization,Accept-Encoding
       Access-Control-Allow-Origin:
@@ -347,37 +359,25 @@ http_interactions:
       Cross-Origin-Resource-Policy:
       - cross-origin
       X-Fastly-Request-Id:
-      - 45544339bfa089cae275403808c4caf2a4afd6f4
+      - c2554e497817a9be612f06efbb4c7d608e801b1a
       Expires:
-      - Fri, 13 Feb 2026 18:41:51 GMT
+      - Tue, 12 May 2026 22:01:50 GMT
       Source-Age:
       - '0'
     body:
       encoding: ASCII-8BIT
       base64_string: |
-        LS0tCnNjaGVtYS12ZXJzaW9uOiB2MS4yLjkKaWQ6IENJRTAwMS0xOTgwCnRp
-        dGxlOgotIGNvbnRlbnQ6IEd1aWRlbGluZXMgZm9yIG1pbmltaXppbmcgdXJi
-        YW4gc2t5IGdsb3cgbmVhciBhc3Ryb25vbWljYWwgb2JzZXJ2YXRvcmllcwog
-        ICAgKEpvaW50IFB1YmxpY2F0aW9uIElBVS9DSUUpCiAgZm9ybWF0OiB0ZXh0
-        L3BsYWluCiAgdHlwZTogdGl0bGUtbWFpbgotIGNvbnRlbnQ6IEd1aWRlbGlu
-        ZXMgZm9yIG1pbmltaXppbmcgdXJiYW4gc2t5IGdsb3cgbmVhciBhc3Ryb25v
-        bWljYWwgb2JzZXJ2YXRvcmllcwogICAgKEpvaW50IFB1YmxpY2F0aW9uIElB
-        VS9DSUUpCiAgZm9ybWF0OiB0ZXh0L3BsYWluCiAgdHlwZTogbWFpbgpsaW5r
-        OgotIGNvbnRlbnQ6IGh0dHBzOi8vc3RvcmUuYWNjdXJpc3RlY2guY29tL3N0
-        YW5kYXJkcy9jaWUtMDAxLTE5ODA/cHJvZHVjdF9pZD0xMjEwMTA3CiAgdHlw
-        ZTogc3JjCnR5cGU6IHN0YW5kYXJkCmRvY2lkOgotIGlkOiBDSUUgMDAxLTE5
-        ODAKICB0eXBlOiBDSUUKICBwcmltYXJ5OiB0cnVlCmRvY251bWJlcjogMDAx
-        LTE5ODAKY29udHJpYnV0b3I6Ci0gb3JnYW5pemF0aW9uOgogICAgbmFtZToK
-        ICAgIC0gY29udGVudDogQ29tbWlzc2lvbiBJbnRlcm5hdGlvbmFsZSBkZSBM
-        J0VjbGFpcmFnZQogICAgYWJicmV2aWF0aW9uOgogICAgICBjb250ZW50OiBD
-        SUUKICAgIHVybDogY2llLmNvLmF0CiAgcm9sZToKICAtIHR5cGU6IHB1Ymxp
-        c2hlcgpsYW5ndWFnZToKLSBlbgpzY3JpcHQ6Ci0gTGF0bgphYnN0cmFjdDoK
-        LSBjb250ZW50OiAnQWxzbyBrbm93biBhcyBhbiBTUERGIGVuZm9yY2VzIHB1
-        Ymxpc2hlciByZXN0cmljdGlvbnMgYXJvdW5kIGZpbGUgc2hhcmluZywKICAg
-        IHByaW50aW5nLCBhbmQgZG93bmxvYWRpbmcuIEZvciBtb3JlIGRldGFpbHMg
-        b24gdGhlc2UgcmVzdHJpY3Rpb25zIHJlZmVyIHRvOiBIZWxwCiAgICBDZW50
-        ZXIuJwogIGxhbmd1YWdlOgogIC0gZW4KICBzY3JpcHQ6CiAgLSBMYXRuCiAg
-        Zm9ybWF0OiB0ZXh0L3BsYWluCmV4dDoKICBzY2hlbWEtdmVyc2lvbjogdjEu
-        MC4wCiAgZG9jdHlwZToKICAgIHR5cGU6IGRvY3VtZW50Cg==
-  recorded_at: Fri, 13 Feb 2026 18:36:51 GMT
+        H4sIAAAAAAAAA81Ty27bQAy86yt4cwtUsp1LGwFFEbhJmyKHAEXPAbWiLcL7
+        ELgrp87Xl7uxHRvtB9Sn3dFyOByO67quohnIYb0jiRx8C7tlc9VcV9y3sLq/
+        XSyW9fL606JKnCy1VQ0m+EQ+tfBt4p4se4qwDgKOPTt+Yb+BSTr0ELd72Njw
+        DJ5QAGOS4INjgxZCF0l2mIIwxQr09+5HYJ/gceqsvkiqBO5vfs1VwXv9rvwO
+        tWWi32k+WmSvYNqPpFDWVbsM/XfaiipVsb3wbUhpjO18HrUFNWjMJBwTmaEx
+        wSmKvkfp49ww1Uf7v4wS+smkJ+4/L6+Wi+Xi46lLFFMdTofaqg9G96dND1uE
+        0xqPRQrqeRR2KHsVLxPlKj+5jqR9e59VC3eTas18QTbo+aWY0BZzPDp6PZ2N
+        uArOcYzFKYXElwK0BD3Bw+zWqE2CGyp12HVCOz7jhDOmohN0bbYFdUQ9ajAp
+        JMGWvvVhoDFvJw4klUW/mZQ86yWv+RYeU748YPIVdrpsNOliJbMbGwNsfXj2
+        GgbQgPx8/Hqn1bpcoxk6kYOQlrPJWvWdhMn3sGYdLA4omq8PRa366lO+KVUP
+        vdLagL0CDdzlOOri1YmEbCOoR2mgSJfUQmvtlkIL38mOhXRF2cpmppe3EbMB
+        lBN3HDMDZdB/JlNPbXn8139+0eRwaASKnaXhq7EKTU5bV38AYSFl4C0EAAA=
+  recorded_at: Tue, 12 May 2026 21:56:50 GMT
 recorded_with: VCR 6.4.0
