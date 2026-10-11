@@ -11,7 +11,9 @@ VCR.configure do |c|
   c.cassette_library_dir = "spec/vcr_cassetes"
   c.default_cassette_options = {
     clean_outdated_http_interactions: true,
-    re_record_interval: 7 * 24 * 3600,
+    # deliberate re-record only; auto-rerecord made CI hit
+    # unreachable live hosts (see relaton/relaton#258)
+    re_record_interval: nil,
     record: :once,
     allow_playback_repeats: true,
     preserve_exact_body_bytes: true,
