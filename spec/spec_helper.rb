@@ -3,7 +3,7 @@
 # require "bundler/setup"
 require "fileutils"
 require "rspec/matchers"
-require "equivalent-xml"
+require "canon/rspec_matchers"
 require "simplecov"
 require "vcr"
 

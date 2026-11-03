@@ -4,7 +4,7 @@ source "https://rubygems.org"
 gemspec
 
 gem "byebug"
-gem "equivalent-xml", "~> 0.6"
+gem "canon", "~> 0.3.122"
 gem "guard", "~> 2.14"
 gem "guard-rspec", "~> 4.7"
 gem "pry-byebug"
