@@ -30,3 +30,19 @@ Bug reports and pull requests go to https://github.com/relaton/relaton.
 
 ---
 
+= ARCHIVED — superseded by the relaton monogem
+
+This repository is archived and no longer maintained. Its code (the
+Relaton DB, cache, registry, and index lookup machinery) was consolidated
+into the relaton monogem:
+
+- Code: https://github.com/relaton/relaton (`lib/relaton/db/`)
+- Gem: `gem "relaton", ">= 3.0"` — install `relaton` alone; no separate
+  relaton-db gem exists or is needed.
+- Usage is unchanged: `Relaton::Db.fetch(...)` and the cache configuration
+  come from the `relaton` gem.
+
+Bug reports and pull requests go to https://github.com/relaton/relaton.
+
+---
+
